@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: library-event-producer
+  profiles:
+    active: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  kafka:
+    topic: "library-events"
+    producer:
+      bootstrap-servers: localhost:9092, localhost:9093, localhost:9094
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        acks: all
+        retries: 10
+        retry.backoff.ms: 50
+    admin:
+      properties:
+        bootstrap-servers: localhost:9092, localhost:9093, localhost:9094
+
+server:
+  port: 8090
+
+---
+spring:
+  config:
+    activate:
+      on-profile: pre
+  kafka:
+    producer:
+      bootstrap-servers: kafka1:9092, kafka2:9093, kafka3:9094
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+server:
+  port: 8090
+
+
+
+
+
